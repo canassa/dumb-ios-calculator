@@ -7,6 +7,7 @@
 //
 
 #import "CalculatorViewController.h"
+#import "CalculatorControl.h"
 
 @interface CalculatorViewController ()
 
@@ -14,16 +15,32 @@
 
 @implementation CalculatorViewController
 
+@synthesize Display = _Display;
+@synthesize calculator = _calculator;
+
+- (IBAction)NumberPressed:(UIButton *)sender {
+    [self.calculator pushToStack:[sender.titleLabel.text doubleValue]];
+    [self updateDisplay];
+    NSLog(sender.titleLabel.text);
+}
+
+- (void)updateDisplay {
+    self.Display.text = [NSString stringWithFormat:@"%f", [self.calculator peekStack]];
+}
+
+- (IBAction)operationPressed:(UIButton *)sender {
+    NSLog(@"Operation");
+}
+
+- (CalculatorControl *)calculator {
+    if (!_calculator) _calculator = [[CalculatorControl alloc] init];
+    return _calculator;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [self updateDisplay];
 }
 
 @end
